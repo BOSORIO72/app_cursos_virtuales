@@ -2,6 +2,13 @@
 <html>
 <head><title>Estudiantes</title></head>
 <body>
+    
+    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
+    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
+    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
+    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
+    </nav>
+
     <h1>Lista de Estudiantes</h1>
     <a href="{{ route('estudiantes.create') }}">Nuevo Estudiante</a>
     <a href="{{ route('cursos.index') }}" style="margin-left:20px">Ver Cursos</a>
