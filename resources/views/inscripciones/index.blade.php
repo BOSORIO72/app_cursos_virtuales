@@ -1,52 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head><title>Inscripciones</title></head>
-<body>
+@extends('layouts.app')
+@section('content')
 
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>📝 Lista de Inscripciones</h1>
+    <a href="{{ route('inscripciones.create') }}" class="btn btn-primary">+ Nueva Inscripción</a>
+</div>
 
-    <h1>Lista de Inscripciones</h1>
-    <a href="{{ route('inscripciones.create') }}">Nueva Inscripción</a>
-    <a href="{{ route('cursos.index') }}" style="margin-left:20px">Ver Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="margin-left:20px">Ver Estudiantes</a>
-    <br><br>
+@if(session('success'))
+    <div class="alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+    <div class="alert-error">{{ session('error') }}</div>
+@endif
 
-    @if(session('success'))
-        <p style="color:green">{{ session('success') }}</p>
-    @endif
-
-    @if(session('error'))
-        <p style="color:red">{{ session('error') }}</p>
-    @endif
-
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>#</th>
-            <th>Estudiante</th>
-            <th>Curso</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
-        </tr>
+<table>
+    <thead>
+        <tr><th>#</th><th>Estudiante</th><th>Curso</th><th>Fecha</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
         @forelse($inscripciones as $ins)
         <tr>
             <td>{{ $ins->id }}</td>
-            <td>{{ $ins->estudiante->nombre }}</td>
+            <td><strong>{{ $ins->estudiante->nombre }}</strong></td>
             <td>{{ $ins->curso->nombre }}</td>
             <td>{{ $ins->created_at->format('d/m/Y') }}</td>
             <td>
                 <form action="{{ route('inscripciones.destroy', $ins) }}" method="POST">
                     @csrf @method('DELETE')
-                    <button onclick="return confirm('¿Cancelar inscripción?')">Cancelar</button>
+                    <button class="btn btn-danger" onclick="return confirm('¿Cancelar inscripción?')">Cancelar</button>
                 </form>
             </td>
         </tr>
         @empty
-        <tr><td colspan="5">No hay inscripciones registradas.</td></tr>
+        <tr>
+            <td colspan="5" style="text-align:center; color:#9ca3af; padding:30px">No hay inscripciones registradas.</td>
+        </tr>
         @endforelse
-    </table>
-</body>
-</html>
+    </tbody>
+</table>
+
+@endsection

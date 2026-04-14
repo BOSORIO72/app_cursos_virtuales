@@ -1,43 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head><title>Nueva Inscripción</title></head>
-<body>
+@extends('layouts.app')
+@section('content')
 
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>➕ Nueva Inscripción</h1>
+    <a href="{{ route('inscripciones.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
 
-    <h1>Inscribir Estudiante</h1>
-    <a href="{{ route('inscripciones.index') }}">← Volver</a>
-    <br><br>
+@if(session('error'))
+    <div class="alert-error">{{ session('error') }}</div>
+@endif
 
-    @if(session('error'))
-        <p style="color:red">{{ session('error') }}</p>
-    @endif
-
-    @if($errors->any())
-        <ul style="color:red">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
-
-    <form action="{{ route('inscripciones.store') }}" method="POST">
-        @csrf
-
-        <label>Estudiante:</label><br>
+<form action="{{ route('inscripciones.store') }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label>Estudiante</label>
         <select name="estudiante_id" required>
             <option value="">-- Selecciona un estudiante --</option>
             @foreach($estudiantes as $est)
                 <option value="{{ $est->id }}">{{ $est->nombre }} ({{ $est->email }})</option>
             @endforeach
         </select>
-        <br><br>
-
-        <label>Curso:</label><br>
+    </div>
+    <div class="form-group">
+        <label>Curso</label>
         <select name="curso_id" required>
             <option value="">-- Selecciona un curso --</option>
             @foreach($cursos as $curso)
@@ -46,9 +31,8 @@
                 </option>
             @endforeach
         </select>
-        <br><br>
+    </div>
+    <button type="submit" class="btn btn-success">Inscribir Estudiante</button>
+</form>
 
-        <button type="submit">Inscribir</button>
-    </form>
-</body>
-</html>
+@endsection

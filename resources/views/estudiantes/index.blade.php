@@ -1,49 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head><title>Estudiantes</title></head>
-<body>
-    
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+@extends('layouts.app')
+@section('content')
 
-    <h1>Lista de Estudiantes</h1>
-    <a href="{{ route('estudiantes.create') }}">Nuevo Estudiante</a>
-    <a href="{{ route('cursos.index') }}" style="margin-left:20px">Ver Cursos</a>
-    <br><br>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>👨‍🎓 Lista de Estudiantes</h1>
+    <a href="{{ route('estudiantes.create') }}" class="btn btn-primary">+ Nuevo Estudiante</a>
+</div>
 
-    @if(session('success'))
-        <p style="color:green">{{ session('success') }}</p>
-    @endif
+@if(session('success'))
+    <div class="alert-success">{{ session('success') }}</div>
+@endif
 
-    <table border="1" cellpadding="8">
+<table>
+    <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Cursos inscritos</th>
-            <th>Acciones</th>
+            <th>Nombre</th><th>Email</th><th>Teléfono</th><th>Cursos</th><th>Acciones</th>
         </tr>
+    </thead>
+    <tbody>
         @forelse($estudiantes as $est)
         <tr>
-            <td>{{ $est->nombre }}</td>
+            <td><strong>{{ $est->nombre }}</strong></td>
             <td>{{ $est->email }}</td>
             <td>{{ $est->telefono ?? 'N/A' }}</td>
             <td>{{ $est->cursos->count() }}</td>
             <td>
-                <a href="{{ route('estudiantes.show', $est) }}">Ver</a> |
-                <a href="{{ route('estudiantes.edit', $est) }}">Editar</a> |
-                <form action="{{ route('estudiantes.destroy', $est) }}" method="POST" style="display:inline">
-                    @csrf @method('DELETE')
-                    <button onclick="return confirm('¿Eliminar estudiante?')">Eliminar</button>
-                </form>
+                <div class="table-actions">
+                    <a href="{{ route('estudiantes.show', $est) }}" class="btn btn-success">Ver</a>
+                    <a href="{{ route('estudiantes.edit', $est) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('estudiantes.destroy', $est) }}" method="POST">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-danger" onclick="return confirm('¿Eliminar estudiante?')">Eliminar</button>
+                    </form>
+                </div>
             </td>
         </tr>
         @empty
-        <tr><td colspan="5">No hay estudiantes registrados.</td></tr>
+        <tr>
+            <td colspan="5" style="text-align:center; color:#9ca3af; padding:30px">No hay estudiantes registrados.</td>
+        </tr>
         @endforelse
-    </table>
-</body>
-</html>
+    </tbody>
+</table>
+
+@endsection

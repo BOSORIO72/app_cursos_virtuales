@@ -1,28 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head><title>Detalle Estudiante</title></head>
-<body>
+@extends('layouts.app')
+@section('content')
 
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>👤 {{ $estudiante->nombre }}</h1>
+    <a href="{{ route('estudiantes.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
 
-    <h1>{{ $estudiante->nombre }}</h1>
-    <a href="{{ route('estudiantes.index') }}">← Volver</a>
-    <br><br>
+<p><strong>Email:</strong> {{ $estudiante->email }}</p>
+<p style="margin-top:10px"><strong>Teléfono:</strong> {{ $estudiante->telefono ?? 'N/A' }}</p>
 
-    <p><strong>Email:</strong> {{ $estudiante->email }}</p>
-    <p><strong>Teléfono:</strong> {{ $estudiante->telefono ?? 'N/A' }}</p>
-
-    <h2>Cursos en los que está inscrito</h2>
-    <ul>
+<h2 style="margin-top:30px; margin-bottom:15px; font-size:18px">Cursos inscritos</h2>
+<table>
+    <thead><tr><th>Curso</th><th>Cupos disponibles</th></tr></thead>
+    <tbody>
         @forelse($estudiante->cursos as $curso)
-            <li>{{ $curso->nombre }} — Cupos disponibles: {{ $curso->cuposDisponibles() }}</li>
+        <tr>
+            <td>{{ $curso->nombre }}</td>
+            <td style="color:{{ $curso->cuposDisponibles() > 0 ? '#059669' : '#dc2626' }}; font-weight:bold">
+                {{ $curso->cuposDisponibles() }}
+            </td>
+        </tr>
         @empty
-            <li>No está inscrito en ningún curso.</li>
+        <tr><td colspan="2" style="text-align:center; color:#9ca3af; padding:20px">Sin cursos inscritos.</td></tr>
         @endforelse
-    </ul>
-</body>
-</html>
+    </tbody>
+</table>
+
+@endsection

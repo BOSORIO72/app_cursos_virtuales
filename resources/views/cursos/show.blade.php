@@ -1,28 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head><title>Detalle Curso</title></head>
-<body>
+@extends('layouts.app')
+@section('content')
 
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>📖 {{ $curso->nombre }}</h1>
+    <a href="{{ route('cursos.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
 
-    <h1>{{ $curso->nombre }}</h1>
-    <a href="{{ route('cursos.index') }}">← Volver</a>
-    <br><br>
-    <p><strong>Descripción:</strong> {{ $curso->descripcion }}</p>
-    <p><strong>Cupos totales:</strong> {{ $curso->cupos }}</p>
-    <p><strong>Cupos disponibles:</strong> {{ $curso->cuposDisponibles() }}</p>
+<p><strong>Descripción:</strong> {{ $curso->descripcion ?? 'Sin descripción' }}</p>
+<p style="margin-top:10px"><strong>Cupos totales:</strong> {{ $curso->cupos }}</p>
+<p style="margin-top:10px"><strong>Cupos disponibles:</strong>
+    <span style="color:{{ $curso->cuposDisponibles() > 0 ? '#059669' : '#dc2626' }}; font-weight:bold">
+        {{ $curso->cuposDisponibles() }}
+    </span>
+</p>
 
-    <h2>Estudiantes inscritos</h2>
-    <ul>
+<h2 style="margin-top:30px; margin-bottom:15px; font-size:18px">Estudiantes inscritos</h2>
+<table>
+    <thead><tr><th>Nombre</th><th>Email</th></tr></thead>
+    <tbody>
         @forelse($curso->estudiantes as $est)
-            <li>{{ $est->nombre }} — {{ $est->email }}</li>
+        <tr>
+            <td>{{ $est->nombre }}</td>
+            <td>{{ $est->email }}</td>
+        </tr>
         @empty
-            <li>No hay estudiantes inscritos aún.</li>
+        <tr><td colspan="2" style="text-align:center; color:#9ca3af; padding:20px">Sin estudiantes inscritos.</td></tr>
         @endforelse
-    </ul>
-</body>
-</html>
+    </tbody>
+</table>
+
+@endsection

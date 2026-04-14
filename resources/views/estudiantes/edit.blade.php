@@ -1,40 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head><title>Editar Estudiante</title></head>
-<body>
+@extends('layouts.app')
+@section('content')
 
-    <nav style="background:#333; padding:10px 20px; margin-bottom:20px">
-    <a href="{{ route('cursos.index') }}" style="color:white; margin-right:20px; text-decoration:none">📚 Cursos</a>
-    <a href="{{ route('estudiantes.index') }}" style="color:white; margin-right:20px; text-decoration:none">👨‍🎓 Estudiantes</a>
-    <a href="{{ route('inscripciones.index') }}" style="color:white; text-decoration:none">📝 Inscripciones</a>
-    </nav>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+    <h1>✏️ Editar Estudiante</h1>
+    <a href="{{ route('estudiantes.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
 
-    <h1>Editar Estudiante</h1>
-    <a href="{{ route('estudiantes.index') }}">← Volver</a>
-    <br><br>
+<form action="{{ route('estudiantes.update', $estudiante) }}" method="POST">
+    @csrf @method('PUT')
+    <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" name="nombre" value="{{ $estudiante->nombre }}" required>
+        @error('nombre') <p class="form-error">{{ $message }}</p> @enderror
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ $estudiante->email }}" required>
+        @error('email') <p class="form-error">{{ $message }}</p> @enderror
+    </div>
+    <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" name="telefono" value="{{ $estudiante->telefono }}">
+    </div>
+    <button type="submit" class="btn btn-warning">Actualizar</button>
+</form>
 
-    @if($errors->any())
-        <ul style="color:red">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
-
-    <form action="{{ route('estudiantes.update', $estudiante) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" value="{{ $estudiante->nombre }}" required><br><br>
-
-        <label>Email:</label><br>
-        <input type="email" name="email" value="{{ $estudiante->email }}" required><br><br>
-
-        <label>Teléfono:</label><br>
-        <input type="text" name="telefono" value="{{ $estudiante->telefono }}"><br><br>
-
-        <button type="submit">Actualizar</button>
-    </form>
-</body>
-</html>
+@endsection
